@@ -1,128 +1,70 @@
- // Initial Variables
+// Initial Variables
  
- var alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+var alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
  
- // variables for tracking wins, losses, guesses left and the letters guessed
- 
- var wins = 0; 
- 
- var losses = 0; 
- 
- var guessesLeft = 9; 
- 
- var lettersGuessed = []; // array to push user choices to
- 
- var computerGuess = [];  // array to push computer choices to
- 
- 
- // Functions
- //    =========================================================================
- window.onload = function() {
-    var compGuess = alphabet[Math.floor(Math.random() * alphabet.length)];
-    computerGuess.push(compGuess);
-    
-    // test in console.log
-    console.log("Computer Pick: " + computerGuess[0]); 
-} 
+// variables for tracking wins, losses, guesses left and the letters guessed
 
-//*****Functions I tried an ultimately abandoned******/
-// Function to update the wins...
-function updateWins() {
-    document.querySelector("#wins").innerHTML = "Wins: " + wins; 
-}
+var wins = 0; 
 
-// Function to update the losses...
-function updateLosses() {
-    document.querySelector("#losses").innerHTML = "Losses: " +
-    losses; 
-}
+var losses = 0; 
 
-//Function to update remaining guesses...
-function updateGuessesLeft() {
-    document.querySelector("#guesses-left").innerHTML = "Guesses Left: " + guessesLeft;
-}
+var guessesLeft = 9; 
 
-// Function to update guesses so far...
-//function updateLettersGuessed() {
-//    document.querySelector("#letters-guessed").innerHTML = "Your Guesses So Far: " + lettersGuessed; 
-//}
+var guessesSoFar = []; // array to push user choices to
 
+var userGuess = null; 
+
+var computerGuess = alphabet[Math.floor(Math.random() * alphabet.length)];
+
+// test in console.log
+console.log("Computer Pick: " + computerGuess);
+   
 
 // Main PROCESS
 //    ===========================================================================
 
 // Calling functions to start the game. 
-// When the user presses a key, it will run the following function...
 document.onkeyup = function(event) {
-// tested in console.log..console.log(document.onkeyup);
-    
-//determine which key was pressed, make it lowercase, and set it to the userGuess variable.
-var userGuess = event.key.toLowerCase(); 
-lettersGuessed.push(userGuess);
 
-    
-console.log(userGuess);   
-    
+// When user presses a key, it records it and saves to userGuess
+var userGuess = String.fromCharCode(event.keyCode).toLowerCase(); 
+
 // If user guesses the same letter as the computer, increase and update score, alert them they got it right.
-if ((userGuess === computerGuess[0]) && (guessesLeft > 0)){
-    alert ("You Win!"); 
-    wins++; 
-    guessesLeft = 9; 
-    updateWins();
-    var compGuess = alphabet[Math.floor(Math.random() * alphabet.length)]; 
-    computerGuess.push(compGuess);
-    console.log(computerGuess[0]);
-    
+if (userGuess === computerGuess) {
+   alert ("You Win!"); 
+   wins++; 
+   guessesLeft = 9; 
+   guessesSoFar = [];
+   computerGuess = alphabet[Math.floor(Math.random() * alphabet.length)];
+   console.log("Computer Pick: " + computerGuess);
+     
 } 
-    
-else if ((userGuess !== computerGuess[0]) && (guessesLeft > 0)) {
-    guessesLeft = guessesLeft - 1; 
-    updateGuessesLeft(); 
-    
 
+// Add the user's guess to guessesSoFar array but only if it wasn't alreaedy previously picked by the user. Also make sure that the character user picks is within the alphabet, and not any non-usable character
+
+else if (guessesSoFar.indexOf(userGuess) < 0 && alphabet.indexOf(userGuess) >= 0) {
+    guessesSoFar[guessesSoFar.length] = userGuess; 
+
+    // If it is a new letter then decrease the remaining guesses by 1
+    guessesLeft--;
 }
 
-else {
-    alert("You lose!");
-    losses++;
-    guessesLeft = 10; 
-    updateLosses();
-    var compGuess = alphabet[Math.floor(Math.random() * alphabet.length)];
-    computerGuess.push(compGuess);
-    console.log(computerGuess[0]);
+// If guessesLeft gets to 0 then record it as a loss
+// And then reset guessesLeft to 9, and empty the guessesSoFar array
+// also have the computer make a new random pick
+
+if (guessesLeft == 0) {
+   alert("You lose!");
+   losses++;
+   guessesLeft = 9; 
+   guessesSoFar = []; 
+   computerGuess = alphabet[Math.floor(Math.random() * alphabet.length)];
+   console.log("Computer Pick: " + computerGuess);
 }
 
-//var html = "<p>Guess What Letter I'm Thinking Of</p>" +
-//    "<p>Wins: " + wins + "</p>" +
-//    "<p>Losses: " + losses + "</p>" +
-//    "<p>Guesses left: " + guessesLeft + "</p>" +
-//    "<p>Your guesses so far: " + lettersGuessed + "</p>";
+// Changes to HTML
+var html = "<h1>The Psychic Game</h1>" + "<h2>Guess What Letter I'm Thinking Of:</h2>" + "<h3>Wins: " + wins + " </h3>" + "<h4>Losses: " + losses + " <h4>" + "<h5>Guesses Left: " + guessesLeft + " </h5>" + "<h6>Your Guesses So Far: " + guessesSoFar + "<h6>";
 
-//document.querySelector("#main").innerHTML = html; 
-
-
+// place HTML into the game ID
+document.querySelector("#main").innerHTML = html; 
 }
-
-// else if (userPick !== computerPick) {
-//     guessesLeft --; //decrements the guesses left
-//     updateGuessesSoFar(); 
-//  }
-// If wrong, alert user he lost. 
-//   else {
-//       alert("You Lose!"); 
-//        losses++; 
-//        guessesLeft--; 
-//        guessesSofar++; 
-//        updateLosses(); 
-//        updateGuesses(); 
-//        updateGuessesSoFar(); 
-//         reset();
-
-// Decrement the guessesLeft variable, Increment the guessesSofar
-//    guessesLeft--; 
-//    guessesSofar++;  
-
-//}
-//  }    
-
-//
