@@ -12,8 +12,6 @@ var guessesLeft = 9;
 
 var guessesSoFar = []; // array to push user choices to
 
-var userGuess = null; 
-
 var computerGuess = alphabet[Math.floor(Math.random() * alphabet.length)];
 
 // test in console.log
@@ -29,7 +27,7 @@ document.onkeyup = function(event) {
 // When user presses a key, it records it and saves to userGuess
 var userGuess = String.fromCharCode(event.keyCode).toLowerCase(); 
 
-// If user guesses the same letter as the computer, increase and update score, alert them they got it right.
+// If user guesses the same letter as the computer, increase and update score, alert "You Win!"
 if (userGuess === computerGuess) {
    alert ("You Win!"); 
    wins++; 
@@ -40,17 +38,17 @@ if (userGuess === computerGuess) {
      
 } 
 
-// Add the user's guess to guessesSoFar array but only if it wasn't alreaedy previously picked by the user. Also make sure that the character user picks is within the alphabet, and not any non-usable character
+// Add the user's guess to guessesSoFar array if not already picked and confirm the character picked is a letter
 
 else if (guessesSoFar.indexOf(userGuess) < 0 && alphabet.indexOf(userGuess) >= 0) {
     guessesSoFar[guessesSoFar.length] = userGuess; 
 
-    // If it is a new letter then decrease the remaining guesses by 1
+    // decrease the remaining guesses by 1
     guessesLeft--;
 }
 
-// If guessesLeft gets to 0 then record it as a loss
-// And then reset guessesLeft to 9, and empty the guessesSoFar array
+// If guessesLeft gets to 0, set as loss
+// Reset guessesLeft to 9, and empty the guessesSoFar array
 // also have the computer make a new random pick
 
 if (guessesLeft == 0) {
